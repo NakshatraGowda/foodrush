@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: menu-service
+  spec:
+    replicas: 2
+    selector:
+      matchLabels:
+        app: menu-service
+    template:
+      metadata:
+        labels:
+          app: menu-service
+      spec:
+        containers:
+          - name: menu-service
+            image: nakshatragowda/foodrush-menu-service:latest
+            ports:
+              - containerPort: 8081
