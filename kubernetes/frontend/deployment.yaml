@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: nakshatragowda/frontend:latest
+          image: nakshatragowda/frontend:${BUILD_NUMBER}
           ports:
             - containerPort: 80
           resources:

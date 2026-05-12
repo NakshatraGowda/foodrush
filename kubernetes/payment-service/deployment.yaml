@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
         - name: payment-service
-          image: nakshatragowda/payment-service:latest
+          image: nakshatragowda/payment-service:${BUILD_NUMBER}
           ports:
             - containerPort: 8083

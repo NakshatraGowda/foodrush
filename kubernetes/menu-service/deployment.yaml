@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
         - name: menu-service
-          image: nakshatragowda/menu-service:latest
+          image: nakshatragowda/menu-service:${BUILD_NUMBER}
           ports:
             - containerPort: 8081
