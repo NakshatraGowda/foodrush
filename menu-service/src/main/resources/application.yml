@@ -5,7 +5,7 @@ spring:
   application:
     name: menu-service
   datasource:
-    url: jdbc:postgresql://localhost:5432/menu_db
+    url: jdbc:postgresql://postgres:5432/menu_db
     username: foodapp
     password: foodapp123
     driver-class-name: org.postgresql.Driver

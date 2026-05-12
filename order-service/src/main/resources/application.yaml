@@ -5,7 +5,7 @@ spring:
   application:
     name: order-service
   datasource:
-    url: jdbc:postgresql://localhost:5432/order_db
+    url: jdbc:postgresql://postgres:5432/order_db
     username: foodapp
     password: foodapp123
     driver-class-name: org.postgresql.Driver
@@ -20,7 +20,7 @@ spring:
 
 payment:
   service:
-    url: http://localhost:8083
+    url: http://payment-service:8083
 
 feign:
   client:
