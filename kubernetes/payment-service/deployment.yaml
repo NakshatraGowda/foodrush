@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
         - name: payment-service
-          image: nakshatragowda/foodrush-payment-service:latest
+          image: nakshatragowda/payment-service:latest
           ports:
             - containerPort: 8083

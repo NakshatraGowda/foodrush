@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
         - name: api-gateway
-          image: nakshatragowda/foodrush-api-gateway:${BUILD_NUMBER}
+          image: nakshatragowda/api-gateway:${BUILD_NUMBER}
           ports:
             - containerPort: 8080

@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: nakshatragowda/foodrush-frontend:latest
+          image: nakshatragowda/frontend:latest
           ports:
             - containerPort: 80
           resources:

@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
         - name: order-service
-          image: nakshatragowda/foodrush-order-service:latest
+          image: nakshatragowda/order-service:latest
           ports:
             - containerPort: 8082
