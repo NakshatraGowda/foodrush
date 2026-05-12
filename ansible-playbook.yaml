@@ -1,0 +1,40 @@
+---
+- name: Install Jenkins (stable method)
+  hosts: all
+  become: yes
+
+  tasks:
+
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install Java
+      apt:
+        name: openjdk-17-jdk
+        state: present
+
+    - name: Install required packages
+      apt:
+        name:
+          - wget
+        state: present
+
+    - name: Download Jenkins package
+      get_url:
+        url: https://pkg.jenkins.io/debian-stable/binary/jenkins_2.440.1_all.deb
+        dest: /tmp/jenkins.deb
+
+    - name: Install Jenkins
+      apt:
+        deb: /tmp/jenkins.deb
+
+    - name: Enable Jenkins
+      systemd:
+        name: jenkins
+        enabled: yes
+
+    - name: Start Jenkins
+      systemd:
+        name: jenkins
+        state: started
