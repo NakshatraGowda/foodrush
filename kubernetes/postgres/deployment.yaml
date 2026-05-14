@@ -27,6 +27,6 @@ spec:
           image: postgres:15
           env:
             - name: POSTGRES_USER
-              value: postgres
+              value: foodapp
             - name: POSTGRES_PASSWORD
-              value: '1234'
+              value: foodapp123
