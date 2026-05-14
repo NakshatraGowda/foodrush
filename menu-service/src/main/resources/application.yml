@@ -6,8 +6,8 @@ spring:
     name: menu-service
   datasource:
     url: jdbc:postgresql://postgres:5432/menu_db
-    username: foodapp
-    password: foodapp123
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
