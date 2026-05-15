@@ -22,7 +22,7 @@ spring:
         - id: menu-service
           uri: http://menu-service-service
           predicates:
-            - Path=/api/menu/**
+            - Path=/api/menu**
           filters:
             - StripPrefix=0
 
