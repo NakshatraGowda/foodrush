@@ -17,3 +17,10 @@ spec:
           image: nakshatragowda/payment-service:${BUILD_NUMBER}
           ports:
             - containerPort: 8083
+          env:
+            - name: POSTGRES_USER
+              value: foodapp
+            - name: POSTGRES_PASSWORD
+              value: foodapp123
+            - name: POSTGRES_DB
+              value: payment_db

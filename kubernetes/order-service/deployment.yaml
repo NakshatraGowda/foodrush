@@ -17,3 +17,10 @@ spec:
           image: nakshatragowda/order-service:${BUILD_NUMBER}
           ports:
             - containerPort: 8082
+          env:
+            - name: POSTGRES_USER
+              value: foodapp
+            - name: POSTGRES_PASSWORD
+              value: foodapp123
+            - name: POSTGRES_DB
+              value: order_db
