@@ -20,7 +20,7 @@ spring:
 
 payment:
   service:
-    url: http://payment-service:8083
+    url: http://payment-service-service
 
 feign:
   client:
