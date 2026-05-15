@@ -15,5 +15,6 @@ spec:
       containers:
         - name: api-gateway
           image: nakshatragowda/api-gateway:${BUILD_NUMBER}
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080

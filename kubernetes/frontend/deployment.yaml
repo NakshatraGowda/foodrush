@@ -17,6 +17,7 @@ spec:
       containers:
         - name: frontend
           image: nakshatragowda/frontend:${BUILD_NUMBER}
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
           resources:

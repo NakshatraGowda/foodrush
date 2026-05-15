@@ -15,6 +15,7 @@ spec:
       containers:
         - name: order-service
           image: nakshatragowda/order-service:${BUILD_NUMBER}
+          imagePullPolicy: Always
           ports:
             - containerPort: 8082
           env:
