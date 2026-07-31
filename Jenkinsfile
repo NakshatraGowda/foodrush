@@ -9,10 +9,10 @@ pipeline{
     //     SCANNER_HOME = tool 'sonar-scanner'
     // }
     stages{
-        stage('Git checkout'){
+        steps('Git checkout'){
             git branch : 'main', url: 'https://github.com/NakshatraGowda/foodrush'
         }
-        stage('mvn'){
+        steps('mvn'){
             sh '''
                 mvn clean compile
             '''
