@@ -1,38 +1,38 @@
-terraform{
-    required_providers {
-        aws={
-            source = "hashicorp/aws"
-            version = "~> 3.0"
-            }
-        }
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 3.0"
+    }
+  }
 }
 
-variable "region"{
-    default = "ap-south-1"
-    description = "AWS Region"
-    }
+variable "region" {
+  default     = "us-east-1"
+  description = "AWS Region"
+}
 
 variable "ami" {
-    default = "ami-07a00cf47dbbc844c"
-    description = "Amazon machine image ID for ubuntu server"
-    }
+  default     = "ami-03deb8c961063af8c"
+  description = "Amazon machine image ID for ubuntu server"
+}
 
 variable "type" {
-    default = "m7i-flex.large"
-    description = "Size of VM"
-    }
+  default     = "m7i-flex.large"
+  description = "Size of VM"
+}
 
 provider "aws" {
-    region = var.region
-    }
+  region = var.region
+}
 
 resource "aws_instance" "foodrush" {
-    ami = var.ami
-    instance_type = var.type
+  ami           = var.ami
+  instance_type = var.type
 
-    key_name = "fourthaccount"
+  key_name = "keypair-Nvirginia"
 
-    tags = {
-        name = "Food Rush"
-        }
-    }
+  tags = {
+    name = "Food Rush"
+  }
+}
