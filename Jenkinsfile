@@ -9,21 +9,27 @@ pipeline{
     //     SCANNER_HOME = tool 'sonar-scanner'
     // }
     stages{
+        stage{
         steps('Git checkout'){
             git branch : 'main', url: 'https://github.com/NakshatraGowda/foodrush'
         }
+        }
+        stage{
         steps('mvn'){
             sh '''
                 mvn clean compile
             '''
         }
-        // stage('sonarqube analysis'){
+        }
+        // stage {
+        // steps('sonarqube analysis'){
         //     sh '''
         //     $SCANNER_HOME/bin/sonar-scanner -Dsonar.host.url=http://35.172.137.54:9000/ -Dsonar.login= \
         //     -Dsonar.projectName=foodrush \
         //     -Dsonar.projectKey=foodrush \
         //     -Dsonar.java.bonaries=. \
         //     '''
+        // }
         // }
     }
 }
