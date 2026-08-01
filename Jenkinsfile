@@ -14,6 +14,16 @@ pipeline{
             git branch : 'main', url: 'https://github.com/NakshatraGowda/foodrush'
         }
         }
+        stage('Debug') {
+    steps {
+        sh '''
+            echo "JAVA_HOME=$JAVA_HOME"
+            which java
+            java -version
+            mvn -version
+        '''
+            }
+        }
         stage('mvn'){
         steps{
             sh '''
