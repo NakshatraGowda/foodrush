@@ -32,6 +32,15 @@ resource "aws_instance" "foodrush" {
 
   key_name = "keypair-Nvirginia"
 
+  user_data = <<-EOF
+              #!/bin/bash
+              apt update -y
+              apt install -y docker
+              systemctl start docker
+              systemctl enable docker
+              usermod -aG docker ubuntu
+              EOF
+
   tags = {
     name = "Food Rush"
   }
