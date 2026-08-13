@@ -1,45 +1,47 @@
-pipeline{
+pipeline {
     agent any
 
-    tools{
+    tools {
         jdk 'JDK21'
         maven 'mvn3'
     }
-    // environment {
-    //     SCANNER_HOME = tool 'sonar-scanner'
-    // }
-    stages{
-        stage('Git checkout'){
-        steps{
-            git branch : 'main', url: 'https://github.com/NakshatraGowda/foodrush'
-        }
+    environment {
+        SCANNER_HOME = tool 'sonar-scanner'
+    }
+    stages {
+        stage('Git checkout') {
+            steps {
+                git branch : 'main', url: 'https://github.com/NakshatraGowda/foodrush'
+            }
         }
         stage('Debug') {
-    steps {
-        sh '''
-            echo "JAVA_HOME=$JAVA_HOME"
-            which java
-            java -version
-            mvn -version
-        '''
+            steps {
+                sh '''
+                    echo "JAVA_HOME=$JAVA_HOME"
+                    which java
+                    java -version
+                    mvn -version
+                '''
             }
         }
-        stage('mvn'){
-        steps{
-            dir('payment-service'){
-                sh 'mvn clean compile'
+        stage('mvn') {
+            steps {
+                dir('payment-service') {
+                    sh 'mvn clean compile'
+                }
             }
-        }
         }
         stage {
-        steps('sonarqube analysis'){
-            sh '''
-            $SCANNER_HOME/bin/sonar-scanner -Dsonar.host.url=http://35.172.137.54:9000/ -Dsonar.login=squ_155756f414f919cdb6fc87d5b2b2b9be1abfa7cc \
-            -Dsonar.projectName=foodrush-payment-service \
-            -Dsonar.projectKey=foodrush-payment-service \
-            -Dsonar.java.bonaries=. \
-            '''
-        }
+            steps('sonarqube analysis') {
+                sh '''
+                $SCANNER_HOME/bin/sonar-scanner \
+                -Dsonar.host.url=http://35.172.137.54:9000/ \
+                -Dsonar.login=squ_6ee255a90792a5174acdacf77e41142984c21372 \
+                -Dsonar.projectName=foodrush-payment-service \
+                -Dsonar.projectKey=foodrush-payment-service \
+                -Dsonar.java.bonaries=. \
+                '''
+            }
         }
     }
 }

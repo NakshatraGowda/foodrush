@@ -1,45 +1,54 @@
-pipeline{
+pipeline {
     agent any
 
-    tools{
+    tools {
         jdk 'JDK21'
         maven 'mvn3'
     }
-    // environment {
-    //     SCANNER_HOME = tool 'sonar-scanner'
-    // }
-    stages{
-        stage('Git checkout'){
-        steps{
-            git branch : 'main', url: 'https://github.com/NakshatraGowda/foodrush'
-        }
+    environment {
+        SCANNER_HOME = tool 'sonar-scanner'
+    }
+    stages {
+        stage('Git checkout') {
+            steps {
+                git branch : 'main', url: 'https://github.com/NakshatraGowda/foodrush'
+            }
         }
         stage('Debug') {
-    steps {
-        sh '''
-            echo "JAVA_HOME=$JAVA_HOME"
-            which java
-            java -version
-            mvn -version
-        '''
+            steps {
+                sh '''
+                    echo "JAVA_HOME=$JAVA_HOME"
+                    which java
+                    java -version
+                    mvn -version
+                '''
             }
         }
-        stage('mvn'){
-        steps{
-            dir('frontend'){
-                sh 'mvn clean compile'
+        stage('mvn') {
+            steps {
+                dir('frontend') {
+                    sh 'mvn clean compile'
+                }
             }
-        }
         }
         stage {
-        steps('sonarqube analysis'){
+        steps('sonarqube analysis') {
             sh '''
-            $SCANNER_HOME/bin/sonar-scanner -Dsonar.host.url=http://35.172.137.54:9000/ -Dsonar.login=squ_155756f414f919cdb6fc87d5b2b2b9be1abfa7cc \
-            -Dsonar.projectName=foodrush-frontend \
-            -Dsonar.projectKey=foodrush-frontend \
-            -Dsonar.java.bonaries=. \
+                $SCANNER_HOME/bin/sonar-scanner \
+                -Dsonar.host.url=http://35.172.137.54:9000/ \
+                -Dsonar.login=squ_6ee255a90792a5174acdacf77e41142984c21372 \
+                -Dsonar.projectName=foodrush-frontend \
+                -Dsonar.projectKey=foodrush-frontend \
+                -Dsonar.java.bonaries=. \
             '''
         }
+        }
+        stage('push to dockerhub') {
+            steps {
+                withDockerRegistry(credentialsId: 'docker-creds', url: 'https://index.docker.io/v1/') {
+                    sh 'docker push frontend:${BUILD_NUMBER}'
+                }
+            }
         }
     }
 }
