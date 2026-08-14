@@ -14,20 +14,10 @@ pipeline {
                 git branch : 'main', url: 'https://github.com/NakshatraGowda/foodrush'
             }
         }
-        stage('Debug') {
-            steps {
-                sh '''
-                    echo "JAVA_HOME=$JAVA_HOME"
-                    which java
-                    java -version
-                    mvn -version
-                '''
-            }
-        }
-        stage('mvn') {
+        stage('build and test') {
             steps {
                 dir('frontend') {
-                    sh 'mvn clean compile'
+                    sh 'npm install && npm run build'
                 }
             }
         }
@@ -35,18 +25,22 @@ pipeline {
         steps('sonarqube analysis') {
             sh '''
                 $SCANNER_HOME/bin/sonar-scanner \
-                -Dsonar.host.url=http://35.172.137.54:9000/ \
+                -Dsonar.host.url=http://localhost:9000/ \
                 -Dsonar.login=squ_6ee255a90792a5174acdacf77e41142984c21372 \
                 -Dsonar.projectName=foodrush-frontend \
                 -Dsonar.projectKey=foodrush-frontend \
-                -Dsonar.java.bonaries=. \
             '''
         }
+        }
+        stage('build docker image') {
+            steps {
+                sh 'docker build -t nakshatragowda/foodrush-frontend:${BUILD_NUMBER}'
+            }
         }
         stage('push to dockerhub') {
             steps {
                 withDockerRegistry(credentialsId: 'docker-creds', url: 'https://index.docker.io/v1/') {
-                    sh 'docker push frontend:${BUILD_NUMBER}'
+                    sh 'docker push nakshatragowda/foodrush-frontend:${BUILD_NUMBER}'
                 }
             }
         }
