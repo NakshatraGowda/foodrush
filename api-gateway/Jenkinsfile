@@ -27,7 +27,7 @@ pipeline {
         stage('mvn') {
             steps {
                 dir('api-gateway') {
-                    sh 'mvn clean compile'
+                    sh 'mvn clean package -DskipTests'
                 }
             }
         }
