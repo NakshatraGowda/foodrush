@@ -45,6 +45,13 @@ pipeline {
                 }
             }
         }
+        stage('Build docker image') {
+            steps {
+                dir('api-gateway') {
+                    sh 'docker build -t api-gateway:${BUILD_NUMBER} .'
+                }
+            }
+        }
         stage('push to dockerhub') {
             steps {
                 withDockerRegistry(credentialsId: 'docker-creds', url: 'https://index.docker.io/v1/') {
