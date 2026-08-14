@@ -27,20 +27,36 @@ pipeline {
         stage('mvn') {
             steps {
                 dir('payment-service') {
-                    sh 'mvn clean compile'
+                    sh 'mvn clean package -DskipTests'
                 }
             }
         }
-        stage {
-            steps('sonarqube analysis') {
-                sh '''
-                $SCANNER_HOME/bin/sonar-scanner \
-                -Dsonar.host.url=http://35.172.137.54:9000/ \
-                -Dsonar.login=squ_6ee255a90792a5174acdacf77e41142984c21372 \
-                -Dsonar.projectName=foodrush-payment-service \
-                -Dsonar.projectKey=foodrush-payment-service \
-                -Dsonar.java.bonaries=. \
+        stage('sonarqube analysis') {
+            steps {
+                dir('payment-service') {
+                    sh '''
+                    $SCANNER_HOME/bin/sonar-scanner \
+                    -Dsonar.host.url=http://localhost:9000 \
+                    -Dsonar.login=squ_6ee255a90792a5174acdacf77e41142984c21372 \
+                    -Dsonar.projectName=foodrush-payment-service \
+                    -Dsonar.projectKey=foodrush-payment-service \
+                    -Dsonar.java.binaries=target/classes \
                 '''
+                }
+            }
+        }
+        stage('Build docker image') {
+            steps {
+                dir('payment-service') {
+                    sh 'docker build -t nakshatragowda/payment-service:${BUILD_NUMBER} .'
+                }
+            }
+        }
+        stage('push to dockerhub') {
+            steps {
+                withDockerRegistry(credentialsId: 'docker-creds', url: 'https://index.docker.io/v1/') {
+                    sh 'docker push nakshatragowda/payment-service:${BUILD_NUMBER}'
+                }
             }
         }
     }
