@@ -48,14 +48,14 @@ pipeline {
         stage('Build docker image') {
             steps {
                 dir('api-gateway') {
-                    sh 'docker build -t api-gateway:${BUILD_NUMBER} .'
+                    sh 'docker build -t nakshatragowda/api-gateway:${BUILD_NUMBER} .'
                 }
             }
         }
         stage('push to dockerhub') {
             steps {
                 withDockerRegistry(credentialsId: 'docker-creds', url: 'https://index.docker.io/v1/') {
-                    sh 'docker push api-gateway:${BUILD_NUMBER}'
+                    sh 'docker push nakshatragowda/api-gateway:${BUILD_NUMBER}'
                 }
             }
         }
