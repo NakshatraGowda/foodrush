@@ -33,14 +33,16 @@ pipeline {
         }
         stage('sonarqube analysis') {
             steps {
-                sh '''
+                dir('api-gateway') {
+                    sh '''
                     $SCANNER_HOME/bin/sonar-scanner \
                     -Dsonar.host.url=http://localhost:9000 \
                     -Dsonar.login=squ_6ee255a90792a5174acdacf77e41142984c21372 \
                     -Dsonar.projectName=foodrush-api-gateway \
                     -Dsonar.projectKey=foodrush-api-gateway \
-                    -Dsonar.java.bonaries=. \
+                    -Dsonar.java.binaries=target/classes \
                 '''
+                }
             }
         }
         stage('push to dockerhub') {
