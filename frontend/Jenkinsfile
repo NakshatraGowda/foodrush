@@ -21,26 +21,31 @@ pipeline {
                 }
             }
         }
-        stage {
-        steps('sonarqube analysis') {
-            sh '''
-                $SCANNER_HOME/bin/sonar-scanner \
-                -Dsonar.host.url=http://localhost:9000/ \
-                -Dsonar.login=squ_6ee255a90792a5174acdacf77e41142984c21372 \
-                -Dsonar.projectName=foodrush-frontend \
-                -Dsonar.projectKey=foodrush-frontend \
-            '''
-        }
-        }
-        stage('build docker image') {
+        stage('sonarqube analysis') {
             steps {
-                sh 'docker build -t nakshatragowda/foodrush-frontend:${BUILD_NUMBER}'
+                dir('frontend') {
+                    sh '''
+                    $SCANNER_HOME/bin/sonar-scanner \
+                    -Dsonar.host.url=http://localhost:9000 \
+                    -Dsonar.login=squ_6ee255a90792a5174acdacf77e41142984c21372 \
+                    -Dsonar.projectName=foodrush-frontend \
+                    -Dsonar.projectKey=foodrush-frontend \
+                    -Dsonar.java.binaries=target/classes \
+                '''
+                }
+            }
+        }
+        stage('Build docker image') {
+            steps {
+                dir('frontend') {
+                    sh 'docker build -t nakshatragowda/frontend:${BUILD_NUMBER} .'
+                }
             }
         }
         stage('push to dockerhub') {
             steps {
                 withDockerRegistry(credentialsId: 'docker-creds', url: 'https://index.docker.io/v1/') {
-                    sh 'docker push nakshatragowda/foodrush-frontend:${BUILD_NUMBER}'
+                    sh 'docker push nakshatragowda/frontend:${BUILD_NUMBER}'
                 }
             }
         }
