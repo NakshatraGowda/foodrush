@@ -1,0 +1,27 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Git checkout') {
+            steps {
+                git branch : 'main', url: 'https://github.com/NakshatraGowda/foodrush'
+            }
+        }
+        stage('deploy') {
+            steps {
+                sh'''
+                    kubectl apply -f kubernetes/frontend/deployment.yaml
+                    kubectl apply -f kubernetes/frontend/service.yaml
+                '''
+            }
+        }
+        stage('verify') {
+            steps {
+                sh '''
+                    kubectl get pods
+                    kubectl get svc
+                '''
+            }
+        }
+    }
+}
