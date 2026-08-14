@@ -4,6 +4,7 @@ pipeline {
     tools {
         jdk 'JDK21'
         maven 'mvn3'
+        nodejs 'nodejs20'
     }
     environment {
         SCANNER_HOME = tool 'sonar-scanner'
@@ -17,7 +18,12 @@ pipeline {
         stage('build and test') {
             steps {
                 dir('frontend') {
-                    sh 'npm install && npm run build'
+                    sh '''
+                        node -v
+                        npm -v
+                        npm ci
+                        npm run build
+                    '''
                 }
             }
         }
@@ -25,13 +31,13 @@ pipeline {
             steps {
                 dir('frontend') {
                     sh '''
-                    $SCANNER_HOME/bin/sonar-scanner \
-                    -Dsonar.host.url=http://localhost:9000 \
-                    -Dsonar.login=squ_6ee255a90792a5174acdacf77e41142984c21372 \
-                    -Dsonar.projectName=foodrush-frontend \
-                    -Dsonar.projectKey=foodrush-frontend \
-                    -Dsonar.java.binaries=target/classes \
-                '''
+                        $SCANNER_HOME/bin/sonar-scanner \
+                        -Dsonar.host.url=http://localhost:9000 \
+                        -Dsonar.login=squ_6ee255a90792a5174acdacf77e41142984c21372 \
+                        -Dsonar.projectName=foodrush-frontend \
+                        -Dsonar.projectKey=foodrush-frontend \
+                        -Dsonar.java.binaries=target/classes \
+                    '''
                 }
             }
         }
