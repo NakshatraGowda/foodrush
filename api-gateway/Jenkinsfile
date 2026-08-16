@@ -1,6 +1,9 @@
 pipeline {
     agent any
 
+    triggers {
+        githubPush()
+    }
     tools {
         jdk 'JDK21'
         maven 'mvn3'
@@ -14,14 +17,24 @@ pipeline {
                 git branch : 'main', url: 'https://github.com/NakshatraGowda/foodrush'
             }
         }
-        stage('Debug') {
+        stage('Check Changes') {
             steps {
-                sh '''
-                    echo "JAVA_HOME=$JAVA_HOME"
-                    which java
-                    java -version
-                    mvn -version
-                '''
+                script {
+                    def changedFiles = sh(
+                        script: 'git diff --name-only HEAD~1 HEAD',
+                        returnStdout: true
+                    ).trim()
+
+                    echo 'Changed files:'
+                    echo changedFiles
+
+                    if (!changedFiles.split('\n').any {
+                        it.startsWith('api-gateway/')
+                    }) {
+                        currentBuild.result = 'NOT_BUILT'
+                        error('No api-gateway changes. Skipping.')
+                    }
+                }
             }
         }
         stage('mvn') {
