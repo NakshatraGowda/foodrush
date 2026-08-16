@@ -15,6 +15,26 @@ pipeline {
                 git branch : 'main', url: 'https://github.com/NakshatraGowda/foodrush'
             }
         }
+        stage('Check Changes') {
+            steps {
+                script {
+                    def changedFiles = sh(
+                        script: 'git diff --name-only HEAD~1 HEAD',
+                        returnStdout: true
+                    ).trim()
+
+                    echo 'Changed files:'
+                    echo changedFiles
+
+                    if (!changedFiles.split('\n').any {
+                        it.startsWith('frontend/')
+                    }) {
+                        currentBuild.result = 'NOT_BUILT'
+                        error('No frontend changes. Skipping.')
+                    }
+                }
+            }
+        }
         stage('build and test') {
             steps {
                 dir('frontend') {
