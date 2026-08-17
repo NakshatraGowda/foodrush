@@ -12,6 +12,9 @@ pipeline {
                 sh'''
                     kubectl apply -f kubernetes/payment-service/deployment.yaml
                     kubectl apply -f kubernetes/payment-service/service.yaml
+                    kubectl set image deployment/api-gateway \
+                    api-gateway=YOUR_DOCKERHUB_USERNAME/api-gateway:${IMAGE_TAG}
+                    kubectl rollout status deployment/api-gateway
                 '''
             }
         }

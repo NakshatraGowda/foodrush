@@ -1,6 +1,13 @@
 pipeline {
     agent any
 
+    parameters {
+        string(
+            name: 'IMAGE_TAG',
+            description: 'Docker image tag to deploy'
+        )
+    }
+
     stages {
         stage('Git checkout') {
             steps {
@@ -12,6 +19,9 @@ pipeline {
                 sh'''
                     kubectl apply -f kubernetes/api-gateway/deployment.yaml
                     kubectl apply -f kubernetes/api-gateway/service.yaml
+                    kubectl set image deployment/api-gateway \
+                    api-gateway=YOUR_DOCKERHUB_USERNAME/api-gateway:${IMAGE_TAG}
+                    kubectl rollout status deployment/api-gateway
                 '''
             }
         }
