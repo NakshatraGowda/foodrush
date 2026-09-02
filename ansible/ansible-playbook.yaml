@@ -1,0 +1,103 @@
+---
+- name: Install Jenkins (stable method)
+  hosts: all
+  become: yes
+
+  tasks:
+
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install Java
+      apt:
+        name: openjdk-21-jdk
+        state: present
+
+    - name: Install required packages
+      apt:
+        name:
+          - wget
+        state: present
+
+    # - name: Download Jenkins package
+    #   get_url:
+    #     url: https://pkg.jenkins.io/debian-stable/binary/jenkins_2.440.1_all.deb
+    #     dest: /tmp/jenkins.deb
+
+    # - name: Install Jenkins
+    #   apt:
+    #     deb: /tmp/jenkins.deb
+
+    # - name: Enable Jenkins
+    #   systemd:
+    #     name: jenkins
+    #     enabled: yes
+
+    # - name: Start Jenkins
+    #   systemd:
+    #     name: jenkins
+    #     state: started
+
+    - name: Install prerequisites
+      apt:
+        name:
+          - ca-certificates
+          - curl
+          - gnupg
+        state: present
+        update_cache: yes
+
+    - name: Create keyrings directory
+      file:
+        path: /etc/apt/keyrings
+        state: directory
+        mode: '0755'
+
+    - name: Download Jenkins GPG key
+      get_url:
+        url: https://pkg.jenkins.io/debian-stable/jenkins.io-2026.key
+        dest: /etc/apt/keyrings/jenkins-keyring.asc
+        mode: '0644'
+
+    - name: Add Jenkins repository
+      apt_repository:
+        repo: "deb [signed-by=/etc/apt/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/"
+        filename: jenkins
+        state: present
+
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install Jenkins
+      apt:
+        name: jenkins
+        state: present
+
+    - name: Enable and start Jenkins
+      systemd:
+        name: jenkins
+        enabled: yes
+        state: started
+
+    - name: Install docker
+      apt:
+        name: docker.io
+        state: present
+      
+    - name: enable docker
+      systemd:
+        name: docker
+        enabled: yes
+    
+    - name: Start docker
+      systemd:
+        name: docker
+        state: started
+
+    - name: Add ubuntu user to docker group
+      ansible.builtin.user:
+        name: ubuntu
+        groups: docker
+        append: true
