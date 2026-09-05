@@ -50,7 +50,7 @@ pipeline {
                     sh '''
                     $SCANNER_HOME/bin/sonar-scanner \
                     -Dsonar.host.url=http://localhost:9000 \
-                    -Dsonar.login=squ_30fd95b618dd254da7f1dbdb1c033a9dc7058369 \
+                    -Dsonar.login=squ_1fa7f266924aa7b3c153cb762e4baa7022e67b3a \
                     -Dsonar.projectName=foodrush-api-gateway \
                     -Dsonar.projectKey=foodrush-api-gateway \
                     -Dsonar.java.binaries=target/classes \
